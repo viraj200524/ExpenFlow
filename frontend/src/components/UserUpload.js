@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Navbar from './Navbar';
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Upload, FileText, Camera, Trash2 } from 'lucide-react';
+import { X, Upload, FileText, Camera, Trash2, ChevronDown } from 'lucide-react';
 import { addInvoice } from '../services/api';
 import { useAuth0 } from '@auth0/auth0-react';
 
@@ -11,13 +11,14 @@ const ReceiptUploader = () => {
         name: user?.name,
         email: user?.email
     };
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [selectedLevel, setSelectedLevel] = useState('Executive Level (CEO, CTO, CFO, COO, CMO)');
-  const [uploading, setUploading] = useState(false);
-  const [dragActive, setDragActive] = useState(false);
-  const [uploadError, setUploadError] = useState(null);
-  const [uploadResults, setUploadResults] = useState(null);
-  const fileInputRef = useRef(null);
+    const [selectedFiles, setSelectedFiles] = useState([]);
+    const [selectedLevel, setSelectedLevel] = useState('Executive Level');
+    const [uploading, setUploading] = useState(false);
+    const [dragActive, setDragActive] = useState(false);
+    const [uploadError, setUploadError] = useState(null);
+    const [uploadResults, setUploadResults] = useState(null);
+    const [fileCategories, setFileCategories] = useState({});
+    const fileInputRef = useRef(null);
 
   const policyData = {
     "Executive Level": {
@@ -109,6 +110,34 @@ const ReceiptUploader = () => {
       }
     }
   };
+
+  const categories = {
+    "Travel Expenses": [
+      "Business Trips",
+      "Local Transportation",
+      "Mileage Reimbursement",
+      "Parking Fees & Tolls"
+    ],
+    "Accommodation": [
+      "Hotel Stays",
+      "Short-Term Rentals",
+      "Meals During Travel"
+    ],
+    "Office Supplies and Equipment": [
+      "Work Tools",
+      "Home Office Setup"
+    ],
+    "Communication Expenses": [
+      "Mobile/Internet Bills"
+    ],
+    "Meals and Entertainment": [
+      "Client Meetings",
+      "Team Outings",
+      "Daily Meal Allowance"
+    ],
+    "Miscellaneous": ["Other"]
+  };
+
   const handleDragEnter = (e) => {
     e.preventDefault();
     setDragActive(true);
@@ -135,6 +164,109 @@ const ReceiptUploader = () => {
     console.log('Selected Level:', selectedLevel);
     console.log('Policy Data:', policyData[selectedLevel]);
   }, [selectedLevel]);
+
+  const CategoryDropdown = ({ fileIndex }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef(null);
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+          setIsOpen(false);
+        }
+      };
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+    const handleCategorySelect = (mainCategory, subCategory) => {
+      setFileCategories(prev => ({
+        ...prev,
+        [fileIndex]: { mainCategory, subCategory }
+      }));
+      setIsOpen(false);
+    };
+    return (
+      <div className="relative" ref={dropdownRef}>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="inline-flex justify-between items-center w-56 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        >
+          <span className="truncate">
+            {fileCategories[fileIndex]
+              ? `${fileCategories[fileIndex].subCategory}`
+              : 'Select Category'}
+          </span>
+          <ChevronDown className="w-4 h-4 ml-2" />
+        </button>
+        {isOpen && (
+          <div className="absolute z-10 mt-2 w-72 bg-white rounded-lg shadow-xl border border-gray-200">
+            {Object.entries(categories).map(([mainCategory, subCategories]) => (
+              <div key={mainCategory} className="py-1">
+                <div className="px-4 py-2 text-xs font-semibold text-gray-500 bg-gray-50">
+                  {mainCategory}
+                </div>
+                {subCategories.map((subCategory) => (
+                  <button
+                    key={subCategory}
+                    onClick={() => handleCategorySelect(mainCategory, subCategory)}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 flex items-center justify-between group"
+                  >
+                    <span>{subCategory}</span>
+                    {fileCategories[fileIndex]?.subCategory === subCategory && (
+                      <span className="text-blue-600">✓</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+  const renderFilePreview = (file, index) => {
+    const isImage = file.type.startsWith('image/');
+    return (
+      <div key={index} className="group relative flex items-center p-4 mb-3 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+        <div className="flex-1 flex items-center">
+          <div className="relative w-14 h-14 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center">
+            {isImage ? (
+              <img
+                src={URL.createObjectURL(file)}
+                alt={file.name}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <FileText className="w-8 h-8 text-blue-500" />
+            )}
+          </div>
+          <div className="ml-4 flex-1">
+          <p className="text-sm font-medium text-gray-800 truncate max-w-xs">
+            {file.name.length > 15 ? `${file.name.slice(0, 15)}...` : file.name}
+          </p>
+            <p className="text-xs text-gray-500 mt-1">
+              {(file.size / 1024 / 1024).toFixed(2)} MB
+            </p>
+          </div>
+          <div className="ml-4">
+            <CategoryDropdown fileIndex={index} />
+          </div>
+        </div>
+        <button
+          onClick={() => {
+            setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+            setFileCategories(prev => {
+              const newCategories = { ...prev };
+              delete newCategories[index];
+              return newCategories;
+            });
+          }}
+          className="ml-4 p-2 hover:bg-red-50 rounded-full transition-colors duration-200 group-hover:text-red-500"
+        >
+          <Trash2 className="w-4 h-4" />
+        </button>
+      </div>
+    );
+  };
 
   const handleUpload = async () => {
     if (selectedFiles.length === 0) return;
@@ -163,7 +295,15 @@ const ReceiptUploader = () => {
 
             for (const result of response.data.results) {
                 try {
-                    const invoiceData = result.data;
+                    const fileCategory = fileCategories[result.index] || {};
+                    const invoiceData = {
+                        ...result.data,
+                        category: fileCategory.mainCategory || 'Miscellaneous',
+                        subcategory: fileCategory.subCategory || 'Other',
+                        employeeLevel: selectedLevel,
+                        status: 'pending'
+                    };
+                    
                     await addInvoice(userData, invoiceData);
                     console.log(`Invoice ${invoiceData.bill.invoice_number} added successfully!`);
                 } catch (error) {
@@ -191,42 +331,6 @@ const ReceiptUploader = () => {
         setUploading(false);
     }
 };
-
-  const renderFilePreview = (file, index) => {
-        const isImage = file.type.startsWith('image/');
-        const isPDF = file.type === 'application/pdf';
-        return (
-          <div key={index} className="group relative flex items-center p-4 mb-3 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
-            <div className="flex-1 flex items-center">
-              <div className="relative w-14 h-14 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center">
-                {isImage ? (
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={file.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <FileText className="w-8 h-8 text-blue-500" />
-                )}
-              </div>
-              <div className="ml-4 flex-1">
-                <p className="text-sm font-medium text-gray-800 truncate max-w-xs">
-                  {file.name}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  {(file.size / 1024 / 1024).toFixed(2)} MB
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={() => removeFile(index)}
-              className="p-2 hover:bg-red-50 rounded-full transition-colors duration-200 group-hover:text-red-500"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
-          </div>
-        );
-      };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-purple-50">
