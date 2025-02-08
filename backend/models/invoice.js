@@ -5,6 +5,7 @@ const invoiceSchema = new mongoose.Schema({
         name: { type: String, required: true },
         email: { type: String, required: true }
     },
+    company: { type: String, required: true },
     bill: {
         currency: String,
         date: Date,
@@ -27,7 +28,6 @@ const invoiceSchema = new mongoose.Schema({
         name: String,
         registration_number: mongoose.Schema.Types.Mixed
     },
-    // New fields
     category: { type: String, required: true },
     subcategory: { type: String, required: true },
     employeeLevel: { type: String, required: true },
