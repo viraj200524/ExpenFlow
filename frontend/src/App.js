@@ -10,6 +10,7 @@ import "./fonts.css";
 import Landing from "./components/Landing";
 import { Orgdashboard } from "./components/org_dashboard";
 import Dashboard from "./components/UserDashboard";
+import ReceiptUploader from "./components/UserUpload";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -25,15 +26,9 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Landing />} />
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Orgdashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route path="/d" element={<Dashboard />} />
+      <Route path="/dashboard" element={<ProtectedRoute><Orgdashboard /></ProtectedRoute> }/>
+      <Route path="/userDashboard" element={<Dashboard />} />
+      <Route path="/userUpload" element={<ReceiptUploader />} />
     </Routes>
   );
 };

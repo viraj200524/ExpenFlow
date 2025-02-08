@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 import mimetypes
 from datetime import datetime, timedelta
 
+
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'pdf'}
