@@ -7,7 +7,7 @@ import LoginButton from './LogInButton/LoginButton';
 import { useAuth0 } from '@auth0/auth0-react';
 import LogoutButton from './LogOutButton/LogoutButton.js';
 import org_dashboard from './org_dashboard';
-import emp_dashboard from './emp_dashboard';
+import emp_dashboard from '../Employee/emp_dashboard.js';
 
 const Landing = () => {
   const { isAuthenticated } = useAuth0();
@@ -56,8 +56,7 @@ const Landing = () => {
           <div className="flex items-center gap-6">
             <BombasticText
               text="ExpenFlow"
-              className="text-3xl text-gray-800"
-              style={{ fontFamily: 'mario' }}
+              className="text-3xl text-gray-800 font-playfair" style={{ fontFamily: 'playfair' }}
             />
           </div>
           <div className="flex pr-8 items-center gap-6">
@@ -74,22 +73,23 @@ const Landing = () => {
       <div className="grid grid-cols-12 border-b border-gray-200">
         <div className="col-span-6 p-20">
           <div className="text-[3.5rem] font-black mb-6 pt-14 leading-tight bg-gradient-to-r from-purple-900 to-slate-900 text-transparent bg-clip-text">
-            STREAMLINE <br/>
+            STREAMLINE <br />
             {/* <BombasticText
               text="EXPENSES"
               className="text-[3.5rem] text-purple-600"
               style={{ fontFamily: 'mario' }}
             /> */}
-            <div className="text-[3.5rem] text-white" style={{ fontFamily: 'mario', '--shadow-color': 'rgba(0, 0, 0, 0.9)',
+            <div className="text-[3.5rem] text-white" style={{
+              fontFamily: 'mario', '--shadow-color': 'rgba(0, 0, 0, 0.9)',
               textShadow: `
               -2px -2px 0 rgba(88, 28, 135, 1),
                2px -2px 0 rgba(51, 65, 85, 1),
               -2px 2px 0 rgba(88, 28, 135, 1),
                2px 2px 0 rgba(51, 65, 85, 1)
             `,
-             }}>EXPENSES</div>
+            }}>EXPENSES</div>
             EFFORTLESSLY
-                     
+
             <div className=" flex justify-center items-?center text-[1.5rem] py-4 pt-10 pr-36">Get Started Now</div>
           </div>
 

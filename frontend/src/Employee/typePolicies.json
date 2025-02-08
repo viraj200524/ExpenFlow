@@ -1,0 +1,91 @@
+{
+    "Executive Level (CEO, CTO, CFO, COO, CMO)": {
+      "Travel Expenses": {
+        "Business Trips": "₹4,00,000 - ₹16,00,000 per trip",
+        "Local Transportation": "₹40,000 - ₹1,60,000 per month",
+        "Mileage Reimbursement": "₹54 per km",
+        "Parking Fees & Tolls": "Fully covered"
+      },
+      "Accommodation": {
+        "Hotel Stays": "₹25,000 - ₹1,25,000 per night",
+        "Short-Term Rentals": "₹4,00,000 - ₹12,00,000 per month",
+        "Meals During Travel": "₹8,000 - ₹40,000 per day"
+      },
+      "Office Supplies and Equipment": {
+        "Work Tools": "Unlimited (as per requirement)",
+        "Home Office Setup": "Up to ₹8,00,000"
+      },
+      "Communication Expenses": {
+        "Mobile/Internet Bills": "Fully covered"
+      },
+      "Meals and Entertainment": {
+        "Client Meetings": "Up to ₹4,00,000 per event",
+        "Team Outings": "Up to ₹1,60,000 per event",
+        "Daily Meal Allowance": "₹8,000 - ₹24,000 per day"
+      }
+    },
+    "Senior Management (VPs)": {
+      "Travel Expenses": {
+        "Business Trips": "₹2,40,000 - ₹8,00,000 per trip",
+        "Local Transportation": "₹24,000 - ₹1,20,000 per month",
+        "Mileage Reimbursement": "₹46 per km",
+        "Parking Fees & Tolls": "Up to ₹40,000 per month"
+      },
+      "Accommodation": {
+        "Hotel Stays": "₹16,000 - ₹80,000 per night",
+        "Short-Term Rentals": "₹2,40,000 - ₹8,00,000 per month",
+        "Meals During Travel": "₹6,000 - ₹24,000 per day"
+      },
+      "Office Supplies and Equipment": {
+        "Work Tools": "Up to ₹4,00,000 per year",
+        "Home Office Setup": "Up to ₹4,00,000"
+      },
+      "Meals and Entertainment": {
+        "Client Meetings": "Up to ₹2,40,000 per event",
+        "Team Outings": "Up to ₹1,20,000 per event"
+      }
+    },
+    "Middle Management (Directors)": {
+      "Travel Expenses": {
+        "Business Trips": "₹1,60,000 - ₹5,60,000 per trip",
+        "Local Transportation": "₹16,000 - ₹80,000 per month",
+        "Mileage Reimbursement": "₹42 per km"
+      },
+      "Office Supplies and Equipment": {
+        "Work Tools": "Up to ₹2,40,000 per year",
+        "Home Office Setup": "Up to ₹2,40,000"
+      },
+      "Meals and Entertainment": {
+        "Client Meetings": "Up to ₹1,60,000 per event"
+      }
+    },
+    "Lower Management (Managers)": {
+      "Travel Expenses": {
+        "Business Trips": "₹80,000 - ₹4,00,000 per trip",
+        "Local Transportation": "₹12,000 - ₹56,000 per month",
+        "Mileage Reimbursement": "₹38 per km"
+      },
+      "Office Supplies and Equipment": {
+        "Work Tools": "Up to ₹1,60,000 per year"
+      }
+    },
+    "Team Leads & Supervisors": {
+      "Travel Expenses": {
+        "Business Trips": "₹40,000 - ₹2,40,000 per trip",
+        "Local Transportation": "₹8,000 - ₹40,000 per month"
+      },
+      "Meals and Entertainment": {
+        "Client Meetings": "Up to ₹80,000 per event"
+      }
+    },
+    "Staff & Employees": {
+      "Travel Expenses": {
+        "Business Trips": "₹24,000 - ₹1,60,000 per trip",
+        "Local Transportation": "Up to ₹24,000 per month"
+      },
+      "Office Supplies and Equipment": {
+        "Work Tools": "Up to ₹80,000 per year"
+      }
+    }
+  }
+  

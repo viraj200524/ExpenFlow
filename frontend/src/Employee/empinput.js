@@ -1,15 +1,13 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
-import { X, Upload, FileText, Camera, Trash2 } from 'lucide-react';
+import { X, Upload, FileText } from 'lucide-react';
 
 const ReceiptUploader = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [selectedLevel, setSelectedLevel] = useState('Executive Level (CEO, CTO, CFO, COO, CMO)');
   const [uploading, setUploading] = useState(false);
-  const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef(null);
 
-  // ... (policyData object remains the same)
   const policyData = {
     "Executive Level (CEO, CTO, CFO, COO, CMO)": {
       "Travel Expenses": {
@@ -101,23 +99,6 @@ const ReceiptUploader = () => {
     }
   };
 
-  const handleDragEnter = (e) => {
-    e.preventDefault();
-    setDragActive(true);
-  };
-
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    setDragActive(false);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setDragActive(false);
-    const files = Array.from(e.dataTransfer.files);
-    setSelectedFiles(prev => [...prev, ...files]);
-  };
-
   const handleFileSelect = (e) => {
     const files = Array.from(e.target.files);
     setSelectedFiles(prev => [...prev, ...files]);
@@ -156,51 +137,47 @@ const ReceiptUploader = () => {
     const isPDF = file.type === 'application/pdf';
 
     return (
-      <div key={index} className="group relative flex items-center p-4 mb-3 bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+      <div key={index} className="relative flex items-center p-3 mb-2 bg-gray-50 rounded-lg border border-gray-200">
         <div className="flex-1 flex items-center">
-          <div className="relative w-14 h-14 rounded-lg overflow-hidden bg-gray-50 flex items-center justify-center">
-            {isImage ? (
-              <img
-                src={URL.createObjectURL(file)}
-                alt={file.name}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <FileText className="w-8 h-8 text-blue-500" />
-            )}
-          </div>
-          <div className="ml-4 flex-1">
-            <p className="text-sm font-medium text-gray-800 truncate max-w-xs">
-              {file.name}
-            </p>
-            <p className="text-xs text-gray-500 mt-1">
+          {isImage ? (
+            <img
+              src={URL.createObjectURL(file)}
+              alt={file.name}
+              className="w-12 h-12 object-cover rounded"
+            />
+          ) : (
+            <FileText className="w-12 h-12 text-gray-400" />
+          )}
+          <div className="ml-3">
+            <p className="text-sm font-medium text-gray-700">{file.name}</p>
+            <p className="text-xs text-gray-500">
               {(file.size / 1024 / 1024).toFixed(2)} MB
             </p>
           </div>
         </div>
         <button
           onClick={() => removeFile(index)}
-          className="p-2 hover:bg-red-50 rounded-full transition-colors duration-200 group-hover:text-red-500"
+          className="p-1 hover:bg-gray-200 rounded-full"
         >
-          <Trash2 className="w-4 h-4" />
+          <X className="w-4 h-4 text-gray-500" />
         </button>
       </div>
     );
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="mb-8 overflow-x-auto bg-white rounded-2xl shadow-sm p-4">
-          <div className="flex space-x-3 pb-2">
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="mb-6 overflow-x-auto">
+          <div className="flex space-x-2 pb-2">
             {Object.keys(policyData).map((level) => (
               <button
                 key={level}
                 onClick={() => setSelectedLevel(level)}
-                className={`px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 transform hover:scale-105 ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
                   selectedLevel === level
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
                 }`}
               >
                 {level}
@@ -209,31 +186,20 @@ const ReceiptUploader = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-white rounded-2xl p-8 shadow-lg">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6">Upload Receipts</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <h2 className="text-lg font-semibold mb-4">Upload Receipts</h2>
             <div
-              onDragEnter={handleDragEnter}
-              onDragLeave={handleDragLeave}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={handleDrop}
-              className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all duration-300 ${
-                dragActive
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 hover:border-blue-400 bg-gray-50'
-              }`}
+              className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-blue-500 transition-colors"
               onClick={() => fileInputRef.current?.click()}
             >
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-50 opacity-50 rounded-xl" />
-              <div className="relative">
-                <Upload className="mx-auto h-16 w-16 text-blue-500 mb-4" />
-                <p className="text-lg font-medium text-gray-900 mb-2">
-                  Drop files here or click to upload
-                </p>
-                <p className="text-sm text-gray-500">
-                  Support for PDF, PNG, JPG (up to 10MB each)
-                </p>
-              </div>
+              <Upload className="mx-auto h-12 w-12 text-gray-400" />
+              <p className="mt-2 text-sm font-medium text-gray-900">
+                Click to upload or drag and drop
+              </p>
+              <p className="mt-1 text-xs text-gray-500">
+                PDF, PNG, JPG up to 10MB each
+              </p>
             </div>
             <input
               type="file"
@@ -244,7 +210,7 @@ const ReceiptUploader = () => {
               className="hidden"
             />
 
-            <div className="mt-8 space-y-3">
+            <div className="mt-6 space-y-2">
               {selectedFiles.map((file, index) => renderFilePreview(file, index))}
             </div>
 
@@ -252,39 +218,32 @@ const ReceiptUploader = () => {
               <button
                 onClick={handleUpload}
                 disabled={uploading}
-                className={`mt-6 w-full py-3 px-6 rounded-xl font-medium text-lg transition-all duration-300 transform hover:scale-105 ${
+                className={`mt-4 w-full py-2 px-4 rounded-lg font-medium ${
                   uploading
-                    ? 'bg-gray-100 text-gray-400'
-                    : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg hover:shadow-xl'
+                    ? 'bg-gray-200 text-gray-500'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
                 }`}
               >
-                {uploading ? 'Uploading...' : `Upload ${selectedFiles.length} Files`}
+                {uploading ? 'Uploading...' : 'Upload Files'}
               </button>
             )}
           </div>
 
-          <div className="bg-white rounded-2xl p-8 shadow-lg">
-            <h2 className="text-xl font-semibold text-gray-800 mb-6">Policy Details</h2>
-            <div className="space-y-6">
-              {Object.entries(policyData[selectedLevel]).map(([category, policies]) => (
-                <div key={category} className="p-4 bg-gray-50 rounded-xl">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full mr-2" />
-                    {category}
-                  </h3>
-                  <div className="space-y-3">
-                    {Object.entries(policies).map(([policy, limit]) => (
-                      <div key={policy} className="flex justify-between items-center py-3 px-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
-                        <span className="text-sm text-gray-600">{policy}</span>
-                        <span className="text-sm font-medium text-gray-900 bg-blue-50 px-3 py-1 rounded-full">
-                          {limit}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+          <div className="bg-white rounded-xl p-6 shadow-sm">
+            <h2 className="text-lg font-semibold mb-4">Policy Details</h2>
+            {Object.entries(policyData[selectedLevel]).map(([category, policies]) => (
+              <div key={category} className="mb-6">
+                <h3 className="text-md font-medium text-gray-900 mb-2">{category}</h3>
+                <div className="space-y-2">
+                  {Object.entries(policies).map(([policy, limit]) => (
+                    <div key={policy} className="flex justify-between items-center py-2 px-3 bg-gray-50 rounded-lg">
+                      <span className="text-sm text-gray-600">{policy}</span>
+                      <span className="text-sm font-medium text-gray-900">{limit}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
