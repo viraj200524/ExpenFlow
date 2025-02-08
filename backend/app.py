@@ -17,8 +17,8 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 VERYFI_URL = "https://api.veryfi.com/api/v8/partner/documents"
 HEADERS = {
     'Accept': 'application/json',
-    'CLIENT-ID': 'vrfUf0oDw8PB7nVgBPfh0WUzmLHOiNE1pbn5pgf',
-    'AUTHORIZATION': 'apikey pseudocause30:6ef1bd869175c48ca0461148218df858'
+    'CLIENT-ID': 'vrfnRVLfK8XO0YHSH0xIeXDdpC1eymliVdL7TKc',
+    'AUTHORIZATION': 'apikey virajvora2409:7405dd36149e92e3954beb21ed4a936a'
 }
 
 def allowed_file(filename):
