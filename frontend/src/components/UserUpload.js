@@ -13,7 +13,7 @@ const ReceiptUploader = () => {
   const fileInputRef = useRef(null);
 
   const policyData = {
-    "Executive Level (CEO, CTO, CFO, COO, CMO)": {
+    "Executive Level": {
       "Travel Expenses": {
         "Business Trips": "₹4,00,000 - ₹16,00,000 per trip",
         "Local Transportation": "₹40,000 - ₹1,60,000 per month",
@@ -38,7 +38,7 @@ const ReceiptUploader = () => {
         "Daily Meal Allowance": "₹8,000 - ₹24,000 per day"
       }
     },
-    "Senior Management (VPs)": {
+    "Senior Management": {
       "Travel Expenses": {
         "Business Trips": "₹2,40,000 - ₹8,00,000 per trip",
         "Local Transportation": "₹24,000 - ₹1,20,000 per month",
@@ -59,7 +59,7 @@ const ReceiptUploader = () => {
         "Team Outings": "Up to ₹1,20,000 per event"
       }
     },
-    "Middle Management (Directors)": {
+    "Middle Management": {
       "Travel Expenses": {
         "Business Trips": "₹1,60,000 - ₹5,60,000 per trip",
         "Local Transportation": "₹16,000 - ₹80,000 per month",
@@ -73,7 +73,7 @@ const ReceiptUploader = () => {
         "Client Meetings": "Up to ₹1,60,000 per event"
       }
     },
-    "Lower Management (Managers)": {
+    "Lower Management": {
       "Travel Expenses": {
         "Business Trips": "₹80,000 - ₹4,00,000 per trip",
         "Local Transportation": "₹12,000 - ₹56,000 per month",
@@ -147,15 +147,18 @@ const ReceiptUploader = () => {
           'Content-Type': 'multipart/form-data',
           'Accept': 'application/json',
         },
-        withCredentials: false
+        withCredentials: false,
       });
-      console.log('Upload results:', response);
   
       if (response.data.results) {
         // Store the results in state
         setUploadResults(response.data.results);
         setSelectedFiles([]);
         
+        // Reset the file input element
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
       } else {
         throw new Error('Invalid response format');
       }
@@ -178,8 +181,6 @@ const ReceiptUploader = () => {
   };
 
   const renderFilePreview = (file, index) => {
-    // ... (keep other existing functions)
-      // ... (keep other existing functions)
         const isImage = file.type.startsWith('image/');
         const isPDF = file.type === 'application/pdf';
         return (
@@ -220,7 +221,7 @@ const ReceiptUploader = () => {
       <Navbar />
       <div className="max-w-7xl mx-auto pt-20 px-4 py-8">
         <div className="mb-8 overflow-x-auto bg-white rounded-2xl shadow-sm p-4">
-          <div className="flex space-x-3 pb-2 overflow-x-auto">
+          <div className="flex justify-center items-center space-x-3 pb-2 overflow-x-auto">
             {Object.keys(policyData).map((level) => (
               <button
                 key={level}
@@ -284,8 +285,59 @@ const ReceiptUploader = () => {
               </div>
             )}
             {uploadResults && (
-              <div className="mt-4 p-4 bg-green-50 text-green-600 rounded-xl">
-                Successfully processed {uploadResults.length} receipt(s)
+              <div className="mt-8">
+                {/* Title */}
+                <h3 className="text-2xl font-bold text-gray-800 mb-6">Processed Receipts</h3>
+
+                {/* Scrollable Container for Results */}
+                <div
+                  className="max-h-[400px] overflow-y-auto border border-gray-200 rounded-lg shadow-md p-4"
+                  style={{ maxHeight: '400px' }}
+                >
+                  {uploadResults.map((result, index) => (
+                    <div key={index} className="mb-4 p-4 bg-white border border-gray-100 rounded-lg">
+                      <h4 className="text-lg font-semibold text-blue-600">{result.filename}</h4>
+                      <div className="mt-2">
+                        <h5 className="font-medium text-gray-700">Vendor Information:</h5>
+                        <ul className="text-sm text-gray-600">
+                          <li>Name: {result.data.vendor.name || 'N/A'}</li>
+                          <li>Category: {result.data.vendor.category || 'N/A'}</li>
+                          <li>Registration Number: {result.data.vendor.registration_number || 'N/A'}</li>
+                        </ul>
+                      </div>
+                      <div className="mt-2">
+                        <h5 className="font-medium text-gray-700">Bill Details:</h5>
+                        <ul className="text-sm text-gray-600">
+                          <li>Date: {result.data.bill.date || 'N/A'}</li>
+                          <li>Invoice Number: {result.data.bill.invoice_number || 'N/A'}</li>
+                          <li>Currency: {result.data.bill.currency || 'N/A'}</li>
+                          <li>Payment Mode: {result.data.bill.payment_mode || 'N/A'}</li>
+                          <li>Total Amount: {result.data.bill.totalAmount ? `₹${result.data.bill.totalAmount.toFixed(2)}` : 'N/A'}</li>
+                          <li>Total Tax: {result.data.bill.totalTax ? `₹${result.data.bill.totalTax.toFixed(2)}` : 'N/A'}</li>
+                        </ul>
+                      </div>
+                      <div className="mt-2">
+                        <h5 className="font-medium text-gray-700">Items:</h5>
+                        {result.data.items.length > 0 ? (
+                          result.data.items.map((item, idx) => (
+                            <div key={idx} className="ml-4 p-2 bg-gray-50 rounded-lg">
+                              <p className="font-medium text-gray-800">Item {idx + 1}: {item.name || 'Unnamed Item'}</p>
+                              <ul className="text-sm text-gray-600">
+                                <li>Quantity: {item.quantity || 'N/A'}</li>
+                                <li>Rate: {item.rate ? `₹${item.rate.toFixed(2)}` : 'N/A'}</li>
+                                <li>Tax: {item.tax ? `₹${item.tax.toFixed(2)}` : 'N/A'}</li>
+                                <li>Discount: {item.discount ? `₹${item.discount.toFixed(2)}` : 'N/A'}</li>
+                                <li>Total: {item.total ? `₹${item.total.toFixed(2)}` : 'N/A'}</li>
+                              </ul>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-sm text-gray-500 italic">No items found in this receipt.</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
             {selectedFiles.length > 0 && (
