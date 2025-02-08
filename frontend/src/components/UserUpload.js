@@ -131,18 +131,17 @@ const ReceiptUploader = () => {
 
   const handleUpload = async () => {
     if (selectedFiles.length === 0) return;
-
+    
     setUploading(true);
     setUploadError(null);
     setUploadResults(null);
-
+    
     const formData = new FormData();
     selectedFiles.forEach(file => {
       formData.append('file', file);
     });
-
+    
     try {
-      // Add configuration for CORS
       const response = await axios.post('http://localhost:5000/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -150,7 +149,7 @@ const ReceiptUploader = () => {
         },
         withCredentials: false
       });
-
+      
       if (response.data.results) {
         setUploadResults(response.data.results);
         setSelectedFiles([]);
@@ -162,10 +161,8 @@ const ReceiptUploader = () => {
       let errorMessage = 'Failed to upload files. Please try again.';
       
       if (error.response) {
-        // Server responded with error
         errorMessage = error.response.data.error || `Server error: ${error.response.status}`;
       } else if (error.request) {
-        // Request made but no response
         errorMessage = 'No response from server. Please check if the server is running.';
       }
       
@@ -173,7 +170,7 @@ const ReceiptUploader = () => {
     } finally {
       setUploading(false);
     }
-  };
+};
 
   const renderFilePreview = (file, index) => {
     // ... (keep other existing functions)

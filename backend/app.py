@@ -5,6 +5,7 @@ import json
 from werkzeug.utils import secure_filename
 import mimetypes
 from datetime import datetime, timedelta
+from flask_cors import CORS
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
@@ -189,50 +190,66 @@ def detect_fraud(receipt_data, policy):
 def upload_file():
     if 'file' not in request.files:
         return jsonify({'error': 'No file provided'}), 400
+    
     files = request.files.getlist('file')
+    
     if not files or all(file.filename == '' for file in files):
         return jsonify({'error': 'No files selected'}), 400
+    
     try:
         policy = load_expense_policy(EXPENSE_POLICY_FILE)
     except Exception as e:
         return jsonify({'error': f'Failed to load expense policy: {str(e)}'}), 500
+    
     results = []
+    
     for file in files:
         if not allowed_file(file.filename):
             return jsonify({'error': f'File type not allowed: {file.filename}'}), 400
+        
         try:
             filename = secure_filename(file.filename)
             filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(filepath)
+            
             mime_type, _ = mimetypes.guess_type(filepath)
             if mime_type is None:
                 mime_type = 'application/octet-stream'
+            
             with open(filepath, 'rb') as uploaded_file:
                 files_dict = {
                     'file': (filename, uploaded_file, mime_type)
                 }
+                
                 response = requests.post(VERYFI_URL, headers=HEADERS, files=files_dict)
-            os.remove(filepath)
-            try:
-                json_data = response.json()
-            except ValueError as e:
-                return jsonify({'error': 'Invalid JSON response from Veryfi API'}), 500
-            if response.status_code not in [200, 201]:
-                return jsonify({'error': 'OCR service error', 'details': response.text}), 500
-            receipt_data = extract_receipt_data(json_data)
-            if not receipt_data:
-                return jsonify({'error': 'Failed to extract receipt data'}), 500
-            fraud_issues = detect_fraud(receipt_data, policy)
-            receipt_data["fraud_issues"] = fraud_issues
-            results.append({
-                'filename': filename,
-                'data': receipt_data
-            })
+                os.remove(filepath)
+                
+                try:
+                    json_data = response.json()
+                except ValueError as e:
+                    return jsonify({'error': 'Invalid JSON response from Veryfi API'}), 500
+                
+                if response.status_code not in [200, 201]:
+                    return jsonify({'error': 'OCR service error', 'details': response.text}), 500
+                
+                receipt_data = extract_receipt_data(json_data)
+                
+                if not receipt_data:
+                    return jsonify({'error': 'Failed to extract receipt data'}), 500
+                
+                fraud_issues = detect_fraud(receipt_data, policy)
+                receipt_data["fraud_issues"] = fraud_issues
+                
+                results.append({
+                    'filename': filename,
+                    'data': receipt_data
+                })
         except Exception as e:
             if os.path.exists(filepath):
                 os.remove(filepath)
             return jsonify({'error': str(e)}), 500
+    
     return jsonify({'results': results})
 
-if __name__ == '__main__':
-    app.run(debug=True)
+app.run(debug=True)
+CORS(app)
