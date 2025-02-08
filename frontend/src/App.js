@@ -5,6 +5,7 @@ import './fonts.css';
 import Landing from './components/Landing';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { useAuth0 } from "@auth0/auth0-react";
+import { Orgdashboard } from './components/org_dashboard';
 const App = () => {
   const domain = process.env.REACT_APP_AUTH0_CLIENT_ID;
   const clientId = process.env.REACT_APP_AUTH0_DOMAIN;
@@ -18,6 +19,7 @@ const App = () => {
       }}
     >
       <Landing />
+      <Orgdashboard />
     </Auth0Provider>
     
   )

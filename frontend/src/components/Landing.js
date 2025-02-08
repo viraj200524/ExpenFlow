@@ -1,15 +1,17 @@
 import React from 'react';
-import { Power, Download, Instagram, Dribbble, Heart, Star, Zap, LogIn, DollarSign, ChartBar } from 'lucide-react';
+import { Building, User, Heart, Star, Zap, DollarSign, ChartBar } from 'lucide-react';
 import { GameCardCarousel } from './GameCard';
 import { GameBoy } from './GameBoy';
 import BombasticText from '../assets/fonts/mario';
 import LoginButton from './LogInButton/LoginButton';
 import { useAuth0 } from '@auth0/auth0-react';
 import LogoutButton from './LogOutButton/LogoutButton';
+import org_dashboard from './org_dashboard';
+import emp_dashboard from './emp_dashboard';
 
 const Landing = () => {
   const { isAuthenticated } = useAuth0();
-  
+
   const cards = [
     {
       title: "Receipt Scanner",
@@ -33,42 +35,56 @@ const Landing = () => {
       color: "from-purple-100 to-purple-200",
     }
   ];
-  
+
   return (
-    <div className="bg-gradient-to-b from-white to-orange-50 min-h-screen">
+    <div className="bg-gradient-to-b from-white to-purple-100 min-h-screen">
       {/* Header */}
       <div className="border-b border-gray-200">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <BombasticText 
-              text="ExpenFlow" 
+            <BombasticText
+              text="ExpenFlow"
               className="text-3xl text-gray-800"
               style={{ fontFamily: 'mario' }}
             />
           </div>
-          {isAuthenticated ? <LogoutButton/> : <LoginButton/>}
+
+          {isAuthenticated ? <LogoutButton /> : <LoginButton />}
         </div>
       </div>
 
       {/* Hero Section */}
       <div className="grid grid-cols-12 border-b border-gray-200">
-        <div className="col-span-6 p-32">
-          <div className="text-6xl font-black mb-6 leading-tight text-gray-800">
-            TRACK YOUR
-            <br />
-            <BombasticText 
-              text="Expenses" 
-              className="text-6xl text-purple-600"
+        <div className="col-span-6 p-20">
+          <div className="text-[3.5rem] font-black mb-6 pt-14 leading-tight bg-gradient-to-r 
+            from-purple-900 to-slate-900 text-transparent bg-clip-text">
+            STREAMLINE
+            <BombasticText
+              text="EXPENSES"
+              className="text-[3.5rem] text-purple-600"
               style={{ fontFamily: 'mario' }}
             />
-            LIKE A GAME
+            EFFORTLESSLY
           </div>
-          <p className="text-gray-600 mb-8 text-lg">Navigate your finances with retro-style tracking!</p>
+          <br></br>
+          {/* <p className="text-gray-600 mb-8 text-2xl font-bold">Login </p> */}
           <div className="flex gap-4">
-            <button className="bg-green-500 text-white px-8 py-4 rounded-full hover:bg-green-600 transition-colors text-lg font-medium flex items-center gap-2">
-              <DollarSign className="w-6 h-6" />
-              START TRACKING
-            </button>
+            <LoginButton
+              link="orgdb"
+              icon={<Building className="w-6 h-6" />}
+              name="Organisation"
+              design="bg-purple-900 text-white px-6 py-3 rounded-full hover:bg-purple-950 transition-colors text-lg font-medium flex items-center gap-2"
+            />
+            {/* <button className="bg-white border-2 border-purple-900 text-purple-900 px-8 py-4 rounded-full hover:bg-purple-50 transition-colors text-lg font-medium flex items-center gap-2">
+              <User className="w-6 h-6" />
+              Employee
+            </button> */}
+            <LoginButton
+              link="userdb"
+              icon={<User className="w-6 h-6" />}
+              name="Employee"
+              design="bg-white border-2 border-purple-900 text-purple-900 px-8 py-4 rounded-full hover:bg-purple-50 transition-colors text-lg font-medium flex items-center gap-2"
+            />
           </div>
         </div>
 
@@ -87,11 +103,13 @@ const Landing = () => {
         } />
       </div>
 
-      {/* Features Section with Carousel */}
-      <div className="py-24 bg-gradient-to-b from-orange-50 to-white">
+      {/* Features Section with Auto-scroll Carousel */}
+      <div className="py-24 bg-gradient-to-b from-purple-100 to-white overflow-hidden">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-16 text-gray-800">Featured Tools</h2>
-          <GameCardCarousel cards={cards} />
+          <h2 className="text-5xl font-bold text-center mb-16 text-purple-900">FEATURES</h2>
+          <div className="embla-carousel">
+            <GameCardCarousel cards={cards} />
+          </div>
         </div>
       </div>
 
@@ -131,19 +149,45 @@ const Landing = () => {
         .animate-float {
           animation: float 2s infinite ease-in-out;
         }
+
+        .embla-carousel {
+          position: relative;
+          padding: 1.5rem;
+        }
+
+        .embla-carousel::before,
+        .embla-carousel::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: 5rem;
+          z-index: 1;
+          pointer-events: none;
+        }
+
+        .embla-carousel::before {
+          left: 0;
+          background: linear-gradient(to right, white, transparent);
+        }
+
+        .embla-carousel::after {
+          right: 0;
+          background: linear-gradient(to left, white, transparent);
+        }
       `}</style>
 
       {/* Footer */}
-      <footer className="bg-gray-50 text-gray-800 py-12">
+      <footer className="bg-purple-200 text-gray-800 py-12">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-4 gap-8 mb-8">
+          <div className="text-purple-900 grid grid-cols-4 gap-8 mb-8">
             <div>
               <h4 className="font-bold mb-4">About ExpenFlow</h4>
-              <p className="text-gray-600">Making expense tracking fun and secure.</p>
+              <p className="text-purple-900">Making expense tracking fun and secure.</p>
             </div>
             <div>
               <h4 className="font-bold mb-4">Features</h4>
-              <ul className="space-y-2 text-gray-600">
+              <ul className="space-y-2 text-purple-900">
                 <li>Receipt Scanner</li>
                 <li>Fraud Detection</li>
                 <li>Analytics</li>
@@ -152,7 +196,7 @@ const Landing = () => {
             </div>
             <div>
               <h4 className="font-bold mb-4">Support</h4>
-              <ul className="space-y-2 text-gray-600">
+              <ul className="space-y-2 text-purple-900">
                 <li>FAQ</li>
                 <li>Contact</li>
                 <li>Documentation</li>
@@ -161,7 +205,7 @@ const Landing = () => {
             </div>
             <div>
               <h4 className="font-bold mb-4">Legal</h4>
-              <ul className="space-y-2 text-gray-600">
+              <ul className="space-y-2 text-purple-900">
                 <li>Privacy Policy</li>
                 <li>Terms of Service</li>
                 <li>Security</li>
@@ -169,11 +213,12 @@ const Landing = () => {
             </div>
           </div>
           <div className="border-t border-gray-200 pt-8 flex justify-between items-center">
-            <p className="text-gray-600">&copy; 2025 ExpenFlow. All rights reserved.</p>
-            <div className="flex items-center gap-2 text-[#d36735]">
-  <Heart className="w-4 h-4" />
-  <span className="text-inherit">Made with love for smart spending</span>
-</div>
+            <p className="text-purple-800">&copy; 2025 ExpenFlow. Bombastic X DJS ACM.</p>
+            <div className="flex items-center gap-2 text-purple-800">
+              <Heart className="w-4 h-4" />
+              {/* <span className="text-purple-700">Made with love for smart spending</sp/an> */}
+              Made with Love for Smart Spending
+            </div>
 
           </div>
         </div>
