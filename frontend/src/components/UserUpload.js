@@ -131,16 +131,16 @@ const ReceiptUploader = () => {
 
   const handleUpload = async () => {
     if (selectedFiles.length === 0) return;
-    
+  
     setUploading(true);
     setUploadError(null);
     setUploadResults(null);
-    
+  
     const formData = new FormData();
     selectedFiles.forEach(file => {
       formData.append('file', file);
     });
-    
+  
     try {
       const response = await axios.post('http://localhost:5000/upload', formData, {
         headers: {
@@ -149,28 +149,33 @@ const ReceiptUploader = () => {
         },
         withCredentials: false
       });
-      
+      console.log('Upload results:', response);
+  
       if (response.data.results) {
+        // Store the results in state
         setUploadResults(response.data.results);
         setSelectedFiles([]);
+        
       } else {
         throw new Error('Invalid response format');
       }
     } catch (error) {
       console.error('Upload failed:', error);
       let errorMessage = 'Failed to upload files. Please try again.';
-      
+  
       if (error.response) {
+        // Server responded with error
         errorMessage = error.response.data.error || `Server error: ${error.response.status}`;
       } else if (error.request) {
+        // Request made but no response
         errorMessage = 'No response from server. Please check if the server is running.';
       }
-      
+  
       setUploadError(errorMessage);
     } finally {
       setUploading(false);
     }
-};
+  };
 
   const renderFilePreview = (file, index) => {
     // ... (keep other existing functions)
