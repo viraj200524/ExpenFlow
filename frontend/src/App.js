@@ -11,7 +11,7 @@ import Landing from "./components/Landing";
 import { Orgdashboard } from "./components/org_dashboard";
 import Dashboard from "./components/UserDashboard";
 import ReceiptUploader from "./components/UserUpload";
-import Test from "./components/test";
+import FetchUserInvoices from "./components/test";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -30,7 +30,7 @@ const AppRoutes = () => {
       <Route path="/dashboard" element={<ProtectedRoute><Orgdashboard /></ProtectedRoute> }/>
       <Route path="/userDashboard" element={<Dashboard />} />
       <Route path="/userUpload" element={<ReceiptUploader />} />
-      <Route path="/test" element={<Test />} />
+      <Route path="/test" element={<FetchUserInvoices />} />
     </Routes>
   );
 };
