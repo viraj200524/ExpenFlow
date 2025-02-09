@@ -2,9 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-
-const invoiceRoutes = require('./routes/invoices');
-const userInvoicesRoutes = require('./routes/userInvoices');
+const invoiceRoutes = require('./routes/invoices'); 
+const userInvoicesRoutes = require('./routes/userInvoices'); 
 
 const app = express();
 
