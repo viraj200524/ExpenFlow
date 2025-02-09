@@ -8,7 +8,7 @@ import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
 import "./App.css";
 import "./fonts.css";
 import Landing from "./components/Landing";
-import { Orgdashboard } from "./components/org_dashboard";
+import Orgdashboard from "./components/org_dashboard";
 import Dashboard from "./components/UserDashboard";
 import ReceiptUploader from "./components/UserUpload";
 import FetchUserInvoices from "./components/test";
