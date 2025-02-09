@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from dateutil import parser
 
 EXPENSE_POLICIES = {
     "Executive Level": {
@@ -154,8 +155,9 @@ def fraud(receipt_data):
     
     try:
         if "date" in bill and isinstance(bill["date"], str):
-            bill_date = datetime.strptime(bill["date"], "%Y-%m-%d") 
+            bill_date = parser.parse(bill["date"])  # Handles ISO 8601 format
             current_date = datetime.now()
+            
             if current_date - bill_date > timedelta(days=30):
                 flags.append(f"Violation: Bill date {bill_date.strftime('%Y-%m-%d')} is older than one month.")
     except Exception as e:
@@ -199,10 +201,14 @@ def fraud(receipt_data):
         if vendor_category.lower() == "parking" or "tolls" in " ".join(description_keywords):
             flags.append(f"Violation: Parking fees or tolls are not fully covered under policy.")
     
-    if not flags:
-        receipt_data["status"] = "Accepted"
+    print(f"******{flags}******")
+    if not flags or len(flags) == 0 or flags == []:
+        print(f"*******{receipt_data}********")
+
+        receipt_data["status"] = 'accepted'
     else:
-        receipt_data["status"] = "pending"
+        print("werty")
+        receipt_data["status"] = 'pending'
     
     receipt_data["flags"] = flags
     return receipt_data
@@ -212,13 +218,13 @@ def detect_fraud(json_data):
     Process a large JSON file containing multiple bills.
     Adds 'flags' and 'status' fields to each bill in the JSON.
     """
-    if isinstance(json_data, list):  # If the input is a list of bills
+    if isinstance(json_data, list):
         processed_data = []
         for bill in json_data:
             processed_bill = fraud(bill)
             processed_data.append(processed_bill)
         return processed_data
-    elif isinstance(json_data, dict):  # If the input is a single bill
+    elif isinstance(json_data, dict):
         return fraud(json_data)
     else:
         raise ValueError("Input JSON must be a dictionary or a list of dictionaries.")

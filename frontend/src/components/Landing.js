@@ -16,6 +16,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import LoginButton from "./LogInButton/LoginButton";
 import Navbar from "./Navbar"; 
 import LogoutButton from "./LogOutButton/LogoutButton";
+import { Link } from "react-router-dom";
 
 const Landing = () => {
   const { isAuthenticated } = useAuth0();
@@ -72,7 +73,21 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-purple-100">
       
-      <Navbar /> 
+      <nav className="fixed w-full bg-white/80 backdrop-blur-md z-50 border-b border-purple-100 px-12">
+      <div className="container mx-auto px-6 py-4">
+        <div className="flex items-center justify-between">
+          <Link to='/' className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-900 bg-clip-text text-transparent">
+            ExpenFlow
+          </Link>
+          <div className="flex gap-8">
+            <Link to="/dashboard" className="text-purple-900 hover:text-purple-700 transition-colors">Dashboard</Link>  
+
+            <Link to="/chatbot" className="text-purple-900 hover:text-purple-700 transition-colors">ChatBot</Link>  
+          </div>
+          {isAuthenticated && <LogoutButton />}
+        </div>
+      </div>
+    </nav> 
      
       <div className="pt-32 pb-20 px-16">
         <div className="container mx-auto">
@@ -89,18 +104,18 @@ const Landing = () => {
               </p>
               <div className="flex gap-4">
                 <LoginButton
-                  link=""
+                  link="dashboard"
                   icon={<Building className="w-6 h-6" />}
                   name="Organisation"
                   design="bg-purple-900 text-white px-6 py-3 rounded-full hover:bg-purple-950 transition-colors text-lg font-medium flex items-center gap-2"
                 />
                 <LoginButton
-                  link=""
+                  link="userDashboard"
                   icon={<User className="w-6 h-6" />}
                   name="Employee"
                   design="bg-white border-2 border-purple-900 text-purple-900 px-8 py-4 rounded-full hover:bg-purple-50 transition-colors text-lg font-medium flex items-center gap-2"
                 />
-                <LogoutButton />
+                {/* <LogoutButton /> */}
               </div>
             </div>
             <div className="fade-in-section opacity-0 flex justify-center">

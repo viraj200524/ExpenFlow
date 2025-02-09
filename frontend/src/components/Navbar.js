@@ -1,7 +1,8 @@
 import React from "react";
 import { Building, User } from "lucide-react";
-import LoginButton from "./LogInButton/LoginButton"; // Make sure the import path is correct
+import LoginButton from "./LogInButton/LoginButton";
 import { Link } from "react-router-dom";
+import LogoutButton from "./LogOutButton/LogoutButton";
 
 const Navbar = () => {
   return (
@@ -12,10 +13,10 @@ const Navbar = () => {
             ExpenFlow
           </Link>
           <div className="flex gap-8">
-            <Link to="/userDashboard" className="text-purple-900 hover:text-purple-700 transition-colors">Dashboard</Link>  
-            <Link to="/userUpload" className="text-purple-900 hover:text-purple-700 transition-colors">Upload</Link>  
-            <Link to="/dashboard" className="text-purple-900 hover:text-purple-700 transition-colors">Dashboard</Link>  
-            
+            {/* <Link to="/userDashboard" className="text-purple-900 hover:text-purple-700 transition-colors">Dashboard</Link>  
+            <Link to="/userUpload" className="text-purple-900 hover:text-purple-700 transition-colors">Upload</Link>   */}
+            <Link to="/chatbot" className="text-purple-900 hover:text-purple-700 transition-colors">ChatBot</Link>  
+            <LogoutButton />
           </div>
         </div>
       </div>

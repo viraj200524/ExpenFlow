@@ -4,6 +4,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { X, Upload, FileText, Camera, Trash2, ChevronDown } from "lucide-react";
 import { addInvoice } from "../services/api";
 import { useAuth0 } from "@auth0/auth0-react";
+import LogoutButton from "./LogOutButton/LogoutButton";
+import { Link } from "react-router-dom";
 
 const ReceiptUploader = () => {
   const { user } = useAuth0();
@@ -367,7 +369,21 @@ const ReceiptUploader = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-purple-50">
-      <Navbar />
+      <nav className="fixed w-full bg-white/80 backdrop-blur-md z-50 border-b border-purple-100 px-12">
+      <div className="container mx-auto px-6 py-4">
+        <div className="flex justify-between items-center">
+          <Link to='/' className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-900 bg-clip-text text-transparent">
+            ExpenFlow
+          </Link>
+          <div className="flex gap-8">
+            <Link to="/userDashboard" className="text-purple-900 hover:text-purple-700 transition-colors">Dashboard</Link>  
+            <Link to="/userUpload" className="text-purple-900 hover:text-purple-700 transition-colors">Upload</Link>  
+            <Link to="/chatbot" className="text-purple-900 hover:text-purple-700 transition-colors">ChatBot</Link>  
+          </div>
+          <LogoutButton />
+        </div>
+      </div>
+    </nav>
       <div className="max-w-7xl mx-auto pt-20 px-4 py-8">
         <div className="mb-8 overflow-x-auto bg-white rounded-2xl shadow-sm p-4">
           <div className="flex justify-center items-center space-x-3 pb-2 overflow-x-auto">

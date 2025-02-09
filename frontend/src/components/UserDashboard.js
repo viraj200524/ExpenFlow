@@ -3,6 +3,8 @@ import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, Legend, Re
 import { AlertTriangle, TrendingUp, Receipt, AlertCircle, CheckCircle2, XCircle, Clock } from 'lucide-react';
 import Navbar from './Navbar';
 import useFetchUserInvoices from '../hooks/useFetchUserInvoices';
+import LogoutButton from './LogOutButton/LogoutButton';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -25,7 +27,6 @@ const Dashboard = () => {
       name: new Date(invoice.createdAt).toLocaleDateString(),
       amount: invoice.bill.totalAmount
     }));
-  // For the pie chart - status distribution
   const statusCounts = invoices.reduce((acc, curr) => {
     acc[curr.status] = (acc[curr.status] || 0) + 1;
     return acc;
@@ -66,7 +67,21 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-purple-50">
-      <Navbar />
+      <nav className="fixed w-full bg-white/80 backdrop-blur-md z-50 border-b border-purple-100 px-12">
+      <div className="container mx-auto px-6 py-4">
+        <div className="flex items-center justify-between items-center">
+          <Link to='/' className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-900 bg-clip-text text-transparent">
+            ExpenFlow
+          </Link>
+          <div className="flex gap-8">
+            <Link to="/userDashboard" className="text-purple-900 hover:text-purple-700 transition-colors">Dashboard</Link>  
+            <Link to="/userUpload" className="text-purple-900 hover:text-purple-700 transition-colors">Upload</Link>  
+            <Link to="/chatbot" className="text-purple-900 hover:text-purple-700 transition-colors">ChatBot</Link>  
+          </div>
+          <LogoutButton />
+        </div>
+      </div>
+    </nav>
 
       <div className="max-w-7xl mx-auto px-4 py-8 pt-24">
         <div className="grid grid-cols-3 gap-6 pb-8">

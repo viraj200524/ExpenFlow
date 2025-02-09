@@ -9,9 +9,10 @@ import {
   Search,
   Download,
 } from "lucide-react";
-import { data } from "./dummydata";
 import Navbar from "./Navbar";
 import useInvoicesByCompany from "../hooks/useInvoicesByCompany";
+import { Link } from "react-router-dom";
+import LogoutButton from "./LogOutButton/LogoutButton";
 
 const TabButton = ({ active, children, onClick }) => (
   <motion.button
@@ -103,23 +104,25 @@ const ReceiptCard = ({ receipt, onView }) => (
 const Modal = ({ isOpen, onClose, children }) => (
   <AnimatePresence>
     {isOpen && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black bg-opacity-50"
-          onClick={onClose}
-        />
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          className="relative w-full max-w-2xl bg-white rounded-2xl shadow-xl p-6 mx-4 max-h-[90vh] overflow-y-auto"
-        >
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+      >
+        <div className="bg-white rounded-lg shadow-lg p-6 w-[90%] max-w-[600px] relative">
+          {/* Close Button */}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            &times;
+          </button>
+
+          {/* Modal Content */}
           {children}
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
     )}
   </AnimatePresence>
 );
@@ -163,9 +166,9 @@ const Orgdashboard = () => {
         body: JSON.stringify(updatedReceipt),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update receipt status");
-      }
+      // if (!response.ok) {
+      //   throw new Error("Failed to update receipt status");
+      // }
 
       const updatedInvoices = localInvoices.map((inv) =>
         inv.id === receipt.id ? updatedReceipt : inv
@@ -237,7 +240,20 @@ const Orgdashboard = () => {
 
   return (
     <div className="min-h-screen bg-purple-50">
-      <Navbar />
+        <nav className="fixed w-full bg-white/80 backdrop-blur-md z-50 border-b border-purple-100 px-12">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between items-center">
+            <Link to='/' className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-900 bg-clip-text text-transparent">
+              ExpenFlow
+            </Link>
+            <div className="flex gap-8">
+              <Link to="/dashboard" className="text-purple-900 hover:text-purple-700 transition-colors">Dashboard</Link>  
+              <Link to="/chatbot" className="text-purple-900 hover:text-purple-700 transition-colors">ChatBot</Link>  
+            </div>
+            <LogoutButton />
+          </div>
+        </div>
+      </nav>
       <main className="container mx-auto px-4 pt-20 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-purple-900 mb-2">
@@ -305,118 +321,108 @@ const Orgdashboard = () => {
         </div>
 
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-          {selectedReceipt && (
-            <div className="space-y-6">
-              <div className="flex justify-between items-start mb-4">
-                <h2 className="text-2xl font-bold text-purple-900">
-                  Receipt Details
-                </h2>
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <XCircle className="h-6 w-6" />
-                </button>
-              </div>
+        {selectedReceipt && (
+  <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+    {/* Title */}
+    <h2 className="text-xl font-bold mb-4">Receipt Details</h2>
 
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <p className="text-lg font-medium text-purple-900">
-                      Customer: {selectedReceipt.name || "N/A"}
-                    </p>
-                    <StatusTag status={selectedReceipt.status || "pending"} />
-                  </div>
-                  <p className="text-gray-600">
-                    Date:{" "}
-                    {selectedReceipt.bill?.date
-                      ? new Date(selectedReceipt.bill.date).toLocaleString()
-                      : "N/A"}
-                  </p>
-                  <p className="text-gray-600">
-                    Amount: {selectedReceipt.bill?.currency || ""}{" "}
-                    {selectedReceipt.bill?.totalAmount || "N/A"}
-                  </p>
-                  <p className="text-gray-600">
-                    Tax: {selectedReceipt.bill?.currency || ""}{" "}
-                    {selectedReceipt.bill?.totalTax || "N/A"}
-                  </p>
-                  <p className="text-gray-600">
-                    Payment Mode: {selectedReceipt.bill?.payment_mode || "N/A"}
-                  </p>
-                </div>
+    {/* Basic Information */}
+    <div className="space-y-2">
+      <p>
+        <strong>Customer:</strong> {selectedReceipt.name || "N/A"}
+      </p>
+      <p>
+        <strong>Date:</strong>{" "}
+        {selectedReceipt.bill?.date
+          ? new Date(selectedReceipt.bill.date).toLocaleString()
+          : "N/A"}
+      </p>
+      <p>
+        <strong>Amount:</strong> {selectedReceipt.bill?.currency || ""}{" "}
+        {selectedReceipt.bill?.totalAmount || "N/A"}
+      </p>
+      <p>
+        <strong>Tax:</strong> {selectedReceipt.bill?.currency || ""}{" "}
+        {selectedReceipt.bill?.totalTax || "N/A"}
+      </p>
+      <p>
+        <strong>Payment Mode:</strong> {selectedReceipt.bill?.payment_mode || "N/A"}
+      </p>
+    </div>
 
-                <div className="space-y-2">
-                  <p className="font-medium text-purple-900">Vendor Details:</p>
-                  <p className="text-gray-600">
-                    Name: {selectedReceipt.vendor?.name || "N/A"}
-                  </p>
-                  <p className="text-gray-600">
-                    Category: {selectedReceipt.vendor?.category || "N/A"}
-                  </p>
-                  <p className="text-gray-600">
-                    Registration:{" "}
-                    {selectedReceipt.vendor?.registration_number || "N/A"}
-                  </p>
-                </div>
+    {/* Vendor Details */}
+    <div className="mt-4">
+      <h3 className="font-semibold">Vendor Details:</h3>
+      <p>
+        <strong>Name:</strong> {selectedReceipt.vendor?.name || "N/A"}
+      </p>
+      <p>
+        <strong>Category:</strong> {selectedReceipt.vendor?.category || "N/A"}
+      </p>
+      <p>
+        <strong>Registration:</strong>{" "}
+        {selectedReceipt.vendor?.registration_number || "N/A"}
+      </p>
+    </div>
 
-                <div className="space-y-2">
-                  <p className="font-medium text-purple-900">Items:</p>
-                  <div className="space-y-2">
-                    {(selectedReceipt.items || []).map((item, index) => (
-                      <div key={index} className="bg-purple-50 p-3 rounded-lg">
-                        <p className="font-medium text-purple-900">
-                          {item?.name || "Unnamed Item"}
-                        </p>
-                        <p className="text-gray-600">
-                          Quantity: {item?.quantity || "N/A"}
-                        </p>
-                        <p className="text-gray-600">
-                          Rate: {selectedReceipt.bill?.currency || ""}{" "}
-                          {item?.rate || "N/A"}
-                        </p>
-                        <p className="text-gray-600">
-                          Tax: {selectedReceipt.bill?.currency || ""}{" "}
-                          {item?.tax || "N/A"}
-                        </p>
-                        <p className="text-gray-600">
-                          Total: {selectedReceipt.bill?.currency || ""}{" "}
-                          {item?.total || "N/A"}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+    {/* Items */}
+    <div className="mt-4">
+      <h3 className="font-semibold">Items:</h3>
+      {(selectedReceipt.items || []).map((item, index) => (
+        <div key={index} className="border-b py-2">
+          <p>{item?.name || "Unnamed Item"}</p>
+          <p>
+            <strong>Quantity:</strong> {item?.quantity || "N/A"}
+          </p>
+          <p>
+            <strong>Rate:</strong> {selectedReceipt.bill?.currency || ""}{" "}
+            {item?.rate || "N/A"}
+          </p>
+          <p>
+            <strong>Tax:</strong> {selectedReceipt.bill?.currency || ""}{" "}
+            {item?.tax || "N/A"}
+          </p>
+          <p>
+            <strong>Total:</strong> {selectedReceipt.bill?.currency || ""}{" "}
+            {item?.total || "N/A"}
+          </p>
+        </div>
+      ))}
+    </div>
 
-                {selectedReceipt.status === "pending" && (
-                  <div className="flex space-x-4 pt-4">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="flex-1 px-4 py-3 bg-green-500 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center space-x-2"
-                      onClick={() =>
-                        handleReceiptAction(selectedReceipt, "accept")
-                      }
-                    >
-                      <CheckCircle className="h-5 w-5" />
-                      <span>Accept Receipt</span>
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="flex-1 px-4 py-3 bg-red-500 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center space-x-2"
-                      onClick={() =>
-                        handleReceiptAction(selectedReceipt, "reject")
-                      }
-                    >
-                      <XCircle className="h-5 w-5" />
-                      <span>Reject Receipt</span>
-                    </motion.button>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
+    {/* Flags Section */}
+    {selectedReceipt.flags && selectedReceipt.flags.length > 0 && (
+      <div className="mt-4">
+        <h3 className="font-semibold">Flags:</h3>
+        <ul className="list-disc pl-5 space-y-1">
+          {selectedReceipt.flags.map((flag, index) => (
+            <li key={index} className="text-red-600">
+              {flag}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {/* Action Buttons for Pending Status */}
+    {selectedReceipt.status === "pending" && (
+      <div className="mt-4 flex gap-4">
+        <button
+          onClick={() => handleReceiptAction(selectedReceipt, "accept")}
+          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
+        >
+          Accept Receipt
+        </button>
+        <button
+          onClick={() => handleReceiptAction(selectedReceipt, "reject")}
+          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
+        >
+          Reject Receipt
+        </button>
+      </div>
+    )}
+  </Modal>
+)}
         </Modal>
       </main>
     </div>
