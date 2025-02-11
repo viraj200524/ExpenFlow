@@ -2,8 +2,12 @@ import React, { useState, useRef, useEffect, memo } from 'react';
 import axios from 'axios';
 import { Send, Bot, User } from 'lucide-react';
 import useFetchUserInvoices from '../hooks/useFetchUserInvoices';
+import { Link } from 'react-router-dom';
+import LogoutButton from './LogOutButton/LogoutButton';
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Chatbot = () => {
+  const { isAuthenticated } = useAuth0();
   const { invoices, error } = useFetchUserInvoices(); 
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
@@ -73,6 +77,19 @@ const Chatbot = () => {
 
   return (
     <div className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 h-screen w-screen flex flex-col justify-between">
+      <nav className="fixed w-full bg-white/80 backdrop-blur-md z-50 border-b border-purple-100 px-12">
+      <div className="container mx-auto px-6 py-4">
+        <div className="flex items-center justify-between">
+          <Link to='/' className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-900 bg-clip-text text-transparent">
+            ExpenFlow
+          </Link>
+          <div className="flex gap-8">
+            <Link to="/chatbot" className="text-purple-900 hover:text-purple-700 transition-colors">ChatBot</Link>  
+          </div>
+          {isAuthenticated && <LogoutButton />}
+        </div>
+      </div>
+    </nav> 
       <div className="flex items-center gap-3 mb-6 pb-4 border-b border-purple-100 p-6">
         <Bot className="w-8 h-8 text-purple-900" />
         <div>
