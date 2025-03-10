@@ -9,11 +9,11 @@ ExpenFlow is an advanced expense management solution designed to streamline and 
 1. [Overview](#overview)
 2. [Objectives](#objectives)
 3. [Features](#features)
-4. [Tech Stack](#tech-stack)
-5. [Project Structure](#project-structure)
-6. [Getting Started](#getting-started)
-7. [Contributors](#contributors)
-8. [Screenshots](#screenshots)
+4. [Screenshots](#screenshots)
+5. [Tech Stack](#tech-stack)
+6. [Project Structure](#project-structure)
+7. [Getting Started](#getting-started)
+8. [Contributors](#contributors)
 
 ## Objectives
 
@@ -29,6 +29,13 @@ ExpenFlow is an advanced expense management solution designed to streamline and 
 - **Interactive Analytics**: Real-time dashboards and insights to track spending patterns across departments.
 - **Automated Compliance**: Policy violation checks and automated flagging ensure adherence to company guidelines.
 - **User Authentication and Authorization**: Secure login and access control using Auth0.
+
+## Screenshots
+
+![landing_page](https://github.com/user-attachments/assets/b875d327-d8f0-41cb-8569-13abaac6036f)
+![user_dashboard](https://github.com/user-attachments/assets/7e2227c4-8966-4d71-a543-ef1a2af61c88)
+![admin_dashboard](https://github.com/user-attachments/assets/45ba1436-fb29-450a-8ef1-36efadb6711b)
+![receipt_upload](https://github.com/user-attachments/assets/9178004f-8574-4958-a7d2-3ea85214079f)
 
 ## Tech Stack
 
@@ -164,8 +171,3 @@ cd project-name
 - **Dhruv Panchal** - [GitHub Profile](https://github.com/dhruvp18)
 - **Viraj Vora** - [GitHub Profile](https://github.com/viraj200524)
 - **Chaitra Samant** - [GitHub Profile](https://github.com/chaitra-samant)
-
-## Screenshots
-
-![Screenshot 1](path/to/screenshot1.png)
-![Screenshot 2](path/to/screenshot2.png)
