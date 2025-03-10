@@ -28,6 +28,8 @@ ExpenFlow is an advanced expense management solution designed to streamline and 
 - **Fraud Detection**: Advanced anomaly detection algorithms identify suspicious patterns and duplicate submissions.
 - **Interactive Analytics**: Real-time dashboards and insights to track spending patterns across departments.
 - **Automated Compliance**: Policy violation checks and automated flagging ensure adherence to company guidelines.
+- **Automatic Report Geneartion**: Generates Two reports, one for the HR and one specific for each employees based on policy violation checks and flagged anomalies.
+- **Automatic Mailing the Genearted Report**: Mail the HR report to HR and employee specific reports to each employees automatically after the generation of respective reports.
 - **User Authentication and Authorization**: Secure login and access control using Auth0.
 
 ## Screenshots
