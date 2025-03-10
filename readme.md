@@ -30,6 +30,7 @@ ExpenFlow is an advanced expense management solution designed to streamline and 
 - **Automated Compliance**: Policy violation checks and automated flagging ensure adherence to company guidelines.
 - **Automatic Report Geneartion**: Generates Two reports, one for the HR (having overall analysis for each employees expenses) and one specific for each employees based on policy violation checks and flagged anomalies.
 - **Automatic Mailing the Genearted Report**: Mail the HR report to HR and employee specific reports to each employees automatically after the generation of respective reports.
+- **AI powered Chatbot** : A general purpose Chatbot along with fine tuning on user specific data to make it suitable for queries related to data of a user.
 - **User Authentication and Authorization**: Secure login and access control using Auth0.
 
 ## Screenshots
